@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="artive">{{ b.name }}</li>
+</ol>
+<a href="#" clas="btn btn-primary">发表文章</a>
+<br />
+<br />
+<table>
+    <thead>
+        <tr>
+            <th>标题</th>
+            <th>作者</th>
+            <th>创建时间</th>
+            <th>最后更新时间</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for article in articles %}
+        <tr>
+            <td>{{ article.title }}</td>
+            <td>{{ article.content }}</td>
+            <td>{{ article.create_timestamp|date:"Y-mm-d P" }}</td>
+            <td>{{ article.last_update_timestamp }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    
+</table>
+{% endblock %}
