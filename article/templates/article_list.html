@@ -1,19 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
-<ol class="breadcrumb">
-    <li><a href="/">Ê×Ò³</a></li>
+<ol class="breadcrumb"> 
+    <li><a href="/">é¦–é¡µ</a></li>
     <li class="artive">{{ b.name }}</li>
 </ol>
-<a href="#" clas="btn btn-primary">·¢±íÎÄÕÂ</a>
+<a href="/article/{{ b.id }}/publish_article" class="btn btn-primary">å‘è¡¨æ–‡ç« </a>
 <br />
 <br />
-<table>
+<table class="table table-bordered">
     <thead>
         <tr>
-            <th>±êÌâ</th>
-            <th>×÷Õß</th>
-            <th>´´½¨Ê±¼ä</th>
-            <th>×îºó¸üÐÂÊ±¼ä</th>
+            <th>æ ‡é¢˜</th>
+            <th>å†…å®¹</th>
+            <th>åˆ›å»ºæ—¶é—´</th>
+            <th>æœ€åŽæ›´æ–°æ—¶é—´</th>
         </tr>
     </thead>
     <tbody>
