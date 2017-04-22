@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<ol class="breadcrumb"> 
+    <li><a href="/">首页</a></li>
+    <li class="artive"><a href="/article/list/{{ block_id }}">{{ block_name }}</a></li>
+    <li class="artive">{{ art.title }}</li>
+</ol>
+<br />
+<table class="table table-bordered">
+    <thead>
+        <tr>标题:{{ art.title }}</tr>
+        <tr>{{ art.content }}</tr> 
+    </thead> 
+</table>
+{% endblock %}

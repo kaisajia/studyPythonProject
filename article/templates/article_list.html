@@ -19,7 +19,7 @@
     <tbody>
         {% for article in articles %}
         <tr>
-            <td>{{ article.title }}</td>
+            <td><a href="/article/{{ b.id }}/article_detail/{{ article.id }}">{{ article.title }}</a></td>
             <td>{{ article.content }}</td>
             <td>{{ article.create_timestamp|date:"Y-mm-d P" }}</td>
             <td>{{ article.last_update_timestamp }}</td>

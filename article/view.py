@@ -3,6 +3,10 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from .models import Article
 from .forms import ArticleForm
+
+from django.views.generic import View
+from django.views.generic import DeleteView
+
 def article_list(request,block_id):
     block_id = int(block_id)
     block = Block.objects.get(id=block_id) 
@@ -15,7 +19,7 @@ def article_list(request,block_id):
     
     return render(request,"article_list.html",{"articles":article_objs,"b":block})
 
-
+#基于函数实现的处理逻辑：简单快速、但是长期看面临迁移到类  
 def publish_article(request,b_id): 
     b_id = int(b_id)
     block = Block.objects.get(id=b_id)
@@ -55,5 +59,52 @@ def publish_article(request,b_id):
         else:
             return render(request,"publish_article.html",{"bol":block,"form":form})
         
-        
+#基于类实现处理逻辑，相对复杂，可以使用高级的设计模式       
+class ArticleCreate(View):
+    template_name="publish_article.html"
     
+    def init_data(self,block_id):
+        self.block_id = block_id
+        self.block = Block.objects.get(id=block_id)
+        
+    def get(self,request,block_id):
+        self.init_data(block_id)
+        return render(request,self.template_name,{"bol":self.block})
+    
+    def post(self,request,block_id):
+        self.init_data(block_id)
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.block = self.block
+            article.status=0
+            article.save()
+            return redirect("/article/list/%s" % block_id)
+        else:
+            return render(request,"publish_article.html",{"bol":self.block,"form":form})
+
+
+
+
+#####文章详情页面也使用两种方式分别实现一下
+###基于函数
+
+def article_detail(request,block_id,aid):
+    block_id = int(block_id)
+    aid = int(aid)
+    block = Block.objects.get(id=block_id) 
+    article = Article.objects.get(id=aid)
+    print(block_id,block.name,block.manager_name)
+    return render(request,"article_detail.html",{"block_id":block_id,"block_name":block.name,"art":article})
+
+
+###基于类
+
+
+
+
+
+
+
+
+
