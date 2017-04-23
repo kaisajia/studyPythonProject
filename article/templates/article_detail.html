@@ -6,10 +6,12 @@
     <li class="artive">{{ art.title }}</li>
 </ol>
 <br />
-<table class="table table-bordered">
-    <thead>
+<div  class="panel panel-default"> 
+    <div class="panel-heading">
         <tr>标题:{{ art.title }}</tr>
+    </div>
+    <div class="panel-body"> 
         <tr>{{ art.content }}</tr> 
-    </thead> 
-</table>
+    </div>  
+</div> 
 {% endblock %}

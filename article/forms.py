@@ -10,7 +10,7 @@ from .models import Article
 #第二种写法，在数据模型中字段量大的时候，比较好用
 class ArticleForm(forms.ModelForm):
     class Meta:
-        model = Article
+        model = Article 
         fields = ['title','content']
 
        
