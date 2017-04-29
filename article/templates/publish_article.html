@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<ol class="breadcrumb"> 
+    <li><a href="/">首页</a></li>
+    <li class="artive"><a href="/article/list/{{ bol.id }}">{{ bol.name }}</a></li>
+    <li class="artive">发表文章</li>
+</ol>
+<br />
+<form class="navbar-form" method="POST" action="/article/{{ bol.id }}/publish_article">{% csrf_token %}
+    <div>
+        {% for field in form %}
+            {% if errors %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger">{{ field.label }}:{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        <div class="form">
+            <span style="width:50px;display:inline-block;" >标题</span>    
+            <input type="text" class="form-control" name="title" style="width:1050px" placeholder="标题" value={{ form.title.value }}>
+        </div>
+        <br />
+        <div class="form">
+            <span style="width:50px;display:inline-block;">内容</span>    
+            <textarea  class="form-control" name="content" style="width:1050px;height: 60px" id="contentInput">{{ form.content.value }}</textarea>
+        </div>
+        <br/>
+        <div>
+            <a style="width:50px;display:inline-block"></a> 
+            <button class="btn btn-primary">发表文章</button>
+        </div>
+    </div>   
+    
+</form>
+{% endblock %}
