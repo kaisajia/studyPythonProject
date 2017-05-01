@@ -53,8 +53,27 @@ def register(request):
         else: 
             user = User(username=username,email=email,password=password)
             user.save()
-            return redirect("/register/register_success")
+            return redirect("/accounts/login")
 
 
 def register_success(request): 
-    return render(request,"register_success.html")     
+    return render(request,"register_success.html")
+
+def user_logout(request): 
+    return render(request,"registration/user_logout.html")
+
+ 
+def change_passwd(request): 
+    return render(request,"registration/password_change_form.html")
+
+
+
+
+
+
+
+
+
+
+
+

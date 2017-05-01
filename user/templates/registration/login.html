@@ -1,33 +1,55 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="col-xs-6 col-md-6" style="margin-left:25%">
-   <div class="panel panel-success">
-        <div class="panel-heading">
-            <h3 class="panel-title"> 登录 </h3>
-        </div>
+
+{% if form.non_field_errors %}
+   {% for error in form.non_field_errors %}
+    <div class="col-xs-12 col-md-12 alert alert-danger" role="alert" style="color:red">{{ error }}</div>
+   {% endfor %}
+{% endif %} 
+
+<div class="col-xs-6 col-md-6" style="margin-left:25%"> 
+   <div class="panel panel-info">
+      <div class="panel-heading">
+         <h3 class="panel-title"> 登录 </h3>
+      </div> 
         <div class="panel-body">
             <form class="navbar-form" method="POST" action="">{% csrf_token %}
-                <div class="input-group col-md-12">
-                    <span class="input-group-addon" id="basic-addon1" >用户名</span>
-                    <input type="text" class="form-control" placeholder="用户名" name="username" value={{ username }}>
-                </div>
+               <div class="input-group col-md-12">
+                  <span class="input-group-addon" id="basic-addon1" >用户名</span>
+                  <input type="text" class="form-control" placeholder="用户名" name="username" value={{ username }}>
+               </div>
+               {% if not form.username.errors %} 
                 <br />
-                <br /> 
+                <br />
+                {% endif %}
+               {% if form.username.errors %} 
+                  {% for error in form.username.errors %}
+                     <div  style="color:red"> 用户名：{{ error }} </div>
+                  {% endfor %}
+               {% endif %}
+                
                 <div class="input-group col-md-12" >
-                    <span class="input-group-addon" id="basic-addon1" >密 码</span>
-                    <input type="text" class="form-control" name="password" value={{ password }}>
-                </div> 
+                  <span class="input-group-addon" id="basic-addon1" >密 码</span>
+                  <input type="text" class="form-control" name="password" value={{ password }}> 
+                </div>
+               {% if not form.password.errors %} 
                 <br />
                 <br />
-                 
+                {% endif %}
+                {% if form.password.errors %} 
+                  {% for error in form.password.errors %}
+                     <div style="color:red"> 密码：{{ error }} </div>
+                  {% endfor %}
+               {% endif %}
+               <input type="hidden" name="next" value="{{ next }}"/>
                 <div >
                      <button type="submit" class="btn btn-primary col-md-4">登 录</button>
-                     {% if error %}
-                        <span style="color: red;margin-left:15%"> {{ error }} </span>
-                     {% endif %}
                 </div> 
             </form>
         </div>
+      <div class="panel-footer">
+         <a  href="/register"> 还没有帐号?去注册...... </a>
+      </div> 
     </div> 
 </div>
 

@@ -98,12 +98,13 @@ class ArticleCreate(View):
         return render(request,self.template_name,{"bol":self.block})
     
     def post(self,request,block_id): 
-        self.init_data(block_id)
+        self.init_data(block_id) 
+        self.user = request.user
         form = ArticleForm(request.POST)
-        print("request.method............:",request.method,"...,form............................:",form)
         if form.is_valid():
             article = form.save(commit=False)
             article.block = self.block
+            article.owner = self.user
             article.status=0
             article.save()
             return redirect("/article/list/%s" % block_id)

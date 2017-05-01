@@ -12,8 +12,8 @@
         <tr>
             <th>标题</th>
             <th>内容</th>
+            <th>作者</th>
             <th>创建时间</th>
-            <th>最后更新时间</th>
         </tr>
     </thead>
     <tbody>
@@ -21,8 +21,8 @@
         <tr>
             <td><a href="/article/{{ b.id }}/article_detail/{{ article.id }}">{{ article.title }}</a></td>
             <td>{{ article.content }}</td>
+            <td>{{ article.owner }}</td>
             <td>{{ article.create_timestamp|date:"Y-mm-d P" }}</td>
-            <td>{{ article.last_update_timestamp }}</td>
         </tr>
         {% endfor %}
     </tbody>

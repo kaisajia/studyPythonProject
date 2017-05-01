@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_REDIRECT_URL="/"
+LOGOUT_REDIRECT_URL="/user/user_logout"
+CHANGE_PASSWORD_URL="/user/change_passwd"
 
 # Application definition
 
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
     'block',
     'article',
     'user',
+    'comment',
 ]
 
 MIDDLEWARE = [
