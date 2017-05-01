@@ -7,5 +7,4 @@ from .view import register_success
 urlpatterns = [
     url(r'^register_success',register_success),
     url(r'^$',register),
-    
 ]

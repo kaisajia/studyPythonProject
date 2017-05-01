@@ -5,6 +5,9 @@ import sys,re
 
 #from .forms import UserForm
 
+def lgoin(request):
+    pass
+
 
 def register(request):
     if request.method=="GET":

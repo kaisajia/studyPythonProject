@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-xs-6 col-md-6" style="margin-left:25%">
+   <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title"> 登录 </h3>
+        </div>
+        <div class="panel-body">
+            <form class="navbar-form" method="POST" action="">{% csrf_token %}
+                <div class="input-group col-md-12">
+                    <span class="input-group-addon" id="basic-addon1" >用户名</span>
+                    <input type="text" class="form-control" placeholder="用户名" name="username" value={{ username }}>
+                </div>
+                <br />
+                <br /> 
+                <div class="input-group col-md-12" >
+                    <span class="input-group-addon" id="basic-addon1" >密 码</span>
+                    <input type="text" class="form-control" name="password" value={{ password }}>
+                </div> 
+                <br />
+                <br />
+                 
+                <div >
+                     <button type="submit" class="btn btn-primary col-md-4">登 录</button>
+                     {% if error %}
+                        <span style="color: red;margin-left:15%"> {{ error }} </span>
+                     {% endif %}
+                </div> 
+            </form>
+        </div>
+    </div> 
+</div>
+
+{% endblock %}    
