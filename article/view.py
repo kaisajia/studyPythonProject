@@ -5,13 +5,54 @@ from django.shortcuts import redirect
 from .models import Article
 from .forms import ArticleForm
 
+from comment.models import Comment
 from django.views.generic import View
 from django.views.generic import DeleteView
+from django.views.generic import DetailView
 
 from django.core.paginator import Paginator
 
-ARTICLE_CNT_1PAGE = 3     ##定义每页显示多少
+
+def paginate_queryset(objs,page_no,cnt_per_age=3,half_show_length=3):
+    p = Paginator(objs,cnt_per_age)
+    if page_no > p.num_pages:
+        page_no = p.num_pages
+    if page_no <= 0:
+        page_no = 1
+    page_links = [i for i in range(page_no - half_show_length,page_no + half_show_length + 1)
+                  if i > 0 and i<=p.num_pages ]
+    page = p.page(page_no)
+    page_first = page_links[0] - 1
+    page_max = page_links[-1] + 1
+    print("p.page_links...............:",p.count)
+    paginate_data = {"has_previous":page_first > 0,
+                     "has_next":page_max <= p.num_pages,
+                     "page_first":page_first ,
+                     "page_links":page_links,
+                     "page_max":page_max,
+                     "page_no":page_no,
+                     "page_links":page_links,
+                     "page_next":page_no + 1,
+                     "page_pre":page_no - 1,
+                     "count":p.count}
+    print("paginate_data............................................:",paginate_data)
+    return (page.object_list,paginate_data)
+
 def article_list(request,block_id):
+    block_id = int(block_id)
+    block = Block.objects.get(id=block_id)
+    page_no = int(request.GET.get("page_no","1"))
+    all_articles = Article.objects.filter(block=block,status=0).order_by("-id")
+ 
+    ###页面上需要分布的变量 
+    page_articles,paginate_data = paginate_queryset(all_articles,page_no)
+    
+    return render(request,"article_list.html",{"articles":page_articles,"b":block,"paginate_data":paginate_data})
+
+
+
+ARTICLE_CNT_1PAGE = 3     ##定义每页显示多少
+def article_list_v1(request,block_id):
     block_id = int(block_id)
     block = Block.objects.get(id=block_id)
     #article_objs = Article.objects.filter(block=block,status=0).order_by("-id") 
@@ -116,19 +157,65 @@ class ArticleCreate(View):
 
 #####文章详情页面也使用两种方式分别实现一下
 ###基于函数
+ 
+###2017-05-30 增加评论展示
 
 def article_detail(request,block_id,aid):
     block_id = int(block_id)
     aid = int(aid)
     block = Block.objects.get(id=block_id) 
     article = Article.objects.get(id=aid)
+        
+    ##评论内容及评论分页
+    all_comments = Comment.objects.filter(article = aid,status=0).order_by("-create_timestamp")  ###order_by ("-column_name")  表示降序
+    page_no = int(request.GET.get("page_no","1"))
+    page_comments,paginate_data = paginate_queryset(all_comments,page_no)
+    #print("all_comments..........",all_comments.size)
     print(block_id,block.name,block.manager_name)
-    return render(request,"article_detail.html",{"block_id":block_id,"block_name":block.name,"art":article})
+    return render(request,"article_detail.html",{"block_id":block_id,"block_name":block.name,"art":article,"comments":page_comments,"paginate_data":paginate_data})
 
 
 ###基于类
 
+class ArticleDetailView(DetailView):
+    model = Article
+    tempate_name = 'article_detail.html'
+    context_object_name = 'article'
 
+    def init_data(self,block_id,aid):
+        self.block_id = block_id
+        self.block = Block.objects.get(id=block_id)
+        self.aid = aid
+        self.article = Article.objects.get(id = aid)
+  
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        page_no = int(self.request.GET.get("page_no","1"))
+        all_comments = Comment.objects.filter(article=context["article"],status=0)
+        print("all_comments...............",all_comments)
+        comments,pagination_data = paginate_queryset(all_comments,page_no,cnt_per_page=3)
+        context['comments'] = comments
+        
+        return context
+
+    def get(self,request,block_id,aid):
+        print("request.method............:",request.method)
+        self.init_data(block_id,aid)
+        return render(request,self.template_name,{"block_id":block_id,"block_name":block.name,"art":article})
+    
+    def post(self,request,block_id): 
+        self.init_data(block_id,aid)
+        self.user = request.user
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.block = self.block
+            article.owner = self.user
+            article.status=0
+            article.save()
+            return redirect("/article/list/%s" % block_id)
+        else:
+            return render(request,"article_detail.html",{"bol":self.block,"form":form})
 
 
 

@@ -9,9 +9,83 @@
 <div  class="panel panel-default"> 
     <div class="panel-heading">
         <tr>标题:{{ art.title }}</tr>
+        <span class="pull-right">作者:{{ art.owner }}</span>
     </div>
     <div class="panel-body"> 
         <tr>{{ art.content }}</tr> 
-    </div>  
-</div> 
+    </div>
+</div>
+<div  class="panel panel-default"> 
+    <div class="panel-heading">
+        <tr>评论区</tr>
+        <span class="pull-right">共计{{ paginate_data.count }} 条评论</span>
+    </div>
+    <table class="table table-bordered">
+        <div class="panel-body"> 
+            <thead>
+                <tr>
+                    <th>作者</th>
+                    <th>内容</th> 
+                    <th>创建时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for comment in comments %}
+                <tr> 
+                    <td>{{ comment.owner }}</td>
+                    <td>{{ comment.conten | linebreaksbr }}</td>
+                    <td>{{ comment.create_timestamp|date:"Y-m-d P" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </div>
+    </table>
+</div>
+{% include "pagination_html.html" %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <tr>我来评论</tr> 
+    </div>
+    <div>
+        <form class="navbar-form" method="POST" action="#">{% csrf_token %}
+            <div>  
+                <div class="form"> 
+                    <textarea  class="form-control" name="content" style="width:100%;height: auto" id="commentContent"></textarea>
+                </div>
+                <br/>
+                <input type="hidden" id="user" name="user" value="{{ user }}"/>
+                <div>
+                    <a style="display:inline-block"></a> 
+                    <button id="commentBtn" class="btn btn-primary">发表评论</button>
+                </div>
+            </div>    
+        </form>     
+    </div>
+</div>
+<script type="text/javascript" src="http://www.htmleaf.com/js/jquery/1.9.1/jquery.js"/>
+<script type="text/javascript" src="../../static/js/jquery.csrf.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+    var article_id = "{{ art.id }}";
+    var page_cnt = "{{ paginate_data.page_no }}"; 
+    $("#commentBtn").click(function(){
+            var comment = $("#commentContent").val();
+            var user = $("#user").val();
+            var param = {"article_id":article_id,"content":comment,"user":user};
+            $.post("/comment/create/",param,function(data){
+                var ret = JSON.parse(data);
+                if (ret["status"]=="ok") {
+                    $("commentContent").val("");
+                    window.location.href = "/article/{{ block_id }}/article_detail/{{ article_id }}?page_no=" + page_cnt
+                } else {
+                    alert(ret["msg"]);
+                }
+            });
+        })
+    });
+    
+</script>
+
+
 {% endblock %}

@@ -22,38 +22,12 @@
             <td><a href="/article/{{ b.id }}/article_detail/{{ article.id }}">{{ article.title }}</a></td>
             <td>{{ article.content }}</td>
             <td>{{ article.owner }}</td>
-            <td>{{ article.create_timestamp|date:"Y-mm-d P" }}</td>
+            <td>{{ article.create_timestamp|date:"Y-m-d P" }}</td>
         </tr>
         {% endfor %}
     </tbody>
     
 </table>
-<nav aria-label="Page navigation">
-    <ul class="pagination">
-        {% if page_first > 0 %}
-            <li>
-                <a href="?page_no={{ page_pre }} " aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-            </li>
-        {% endif %}
-        {% for page_num in page_links %}
-            {% if page_num == page_no %}
-                <li class="active">
-                    <a href="?page_no={{ page_num}} ">{{ page_num }}</a>
-                </li>
-            {% endif %} 
-            {% if page_num != page_no %}
-                <li>
-                    <a href="?page_no={{ page_num}} ">{{ page_num }}</a>
-                </li>
-            {% endif %} 
-        {% endfor %}
-        {% if page_max <= page_nums %}
-            <li>
-                <a href="?page_no={{ page_next }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-            </li>
-        {% endif %}
-    
-    </ul> 
-</nav>
+{% include "pagination_html.html" %}
 
 {% endblock %}

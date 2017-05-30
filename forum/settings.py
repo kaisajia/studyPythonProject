@@ -29,7 +29,13 @@ ALLOWED_HOSTS = []
 
 LOGIN_REDIRECT_URL="/"
 LOGOUT_REDIRECT_URL="/user/user_logout"
-CHANGE_PASSWORD_URL="/user/change_passwd"
+
+EMAIL_USE_SSL = True
+EMAIL_HOST = "smtp.qq.com"
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "464018299@qq.com"
+EMAIL_HOST_PASSWORD = "vpjkbewjzcnobjhh"
+DEFAULT_FROM_EMAIL="464018299@qq.com"
 
 # Application definition
 
