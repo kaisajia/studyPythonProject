@@ -33,7 +33,7 @@
                 {% for comment in comments %}
                 <tr> 
                     <td>{{ comment.owner }}</td>
-                    <td>{{ comment.conten | linebreaksbr }}</td>
+                    <td>{{ comment.content | linebreaksbr }}</td>
                     <td>{{ comment.create_timestamp|date:"Y-m-d P" }}</td>
                 </tr>
                 {% endfor %}
@@ -46,20 +46,17 @@
     <div class="panel-heading">
         <tr>我来评论</tr> 
     </div>
-    <div>
-        <form class="navbar-form" method="POST" action="#">{% csrf_token %}
-            <div>  
-                <div class="form"> 
-                    <textarea  class="form-control" name="content" style="width:100%;height: auto" id="commentContent"></textarea>
-                </div>
-                <br/>
-                <input type="hidden" id="user" name="user" value="{{ user }}"/>
-                <div>
-                    <a style="display:inline-block"></a> 
-                    <button id="commentBtn" class="btn btn-primary">发表评论</button>
-                </div>
-            </div>    
-        </form>     
+    <div> 
+        <div>  
+            <div class="form"> 
+                <textarea  class="form-control" name="content" style="width:100%;height: auto" id="commentContent"></textarea>
+            </div>
+            <br/> 
+            <div>
+                <a style="display:inline-block"></a> 
+                <button id="commentBtn" class="btn btn-primary">发表评论</button>
+            </div>
+        </div>     
     </div>
 </div>
 <script type="text/javascript" src="http://www.htmleaf.com/js/jquery/1.9.1/jquery.js"/>
@@ -70,16 +67,19 @@ $(document).ready(function(){
     var article_id = "{{ art.id }}";
     var page_cnt = "{{ paginate_data.page_no }}"; 
     $("#commentBtn").click(function(){
-            var comment = $("#commentContent").val();
-            var user = $("#user").val();
-            var param = {"article_id":article_id,"content":comment,"user":user};
+            var comment = $("#commentContent").val(); 
+            var param = {"article_id":article_id,"content":comment};
+            alert(comment);
             $.post("/comment/create/",param,function(data){
-                var ret = JSON.parse(data);
-                if (ret["status"]=="ok") {
+                alert(data);
+                //var ret = JSON.parse(data);
+                alert(data["status"])
+                if (data["status"]=="ok") {
+                    alert("OK")
                     $("commentContent").val("");
-                    window.location.href = "/article/{{ block_id }}/article_detail/{{ article_id }}?page_no=" + page_cnt
+                    window.location.href = "/article/{{ block_id }}/article_detail/{{ art.id }}?page_no=" + page_cnt
                 } else {
-                    alert(ret["msg"]);
+                    alert(data["msg"]);
                 }
             });
         })

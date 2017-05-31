@@ -24,7 +24,7 @@ def paginate_queryset(objs,page_no,cnt_per_age=3,half_show_length=3):
     page = p.page(page_no)
     page_first = page_links[0] - 1
     page_max = page_links[-1] + 1
-    print("p.page_links...............:",p.count)
+    #print("p.page_links...............:",p.count)
     paginate_data = {"has_previous":page_first > 0,
                      "has_next":page_max <= p.num_pages,
                      "page_first":page_first ,
@@ -35,7 +35,7 @@ def paginate_queryset(objs,page_no,cnt_per_age=3,half_show_length=3):
                      "page_next":page_no + 1,
                      "page_pre":page_no - 1,
                      "count":p.count}
-    print("paginate_data............................................:",paginate_data)
+    #print("paginate_data............................................:",paginate_data)
     return (page.object_list,paginate_data)
 
 def article_list(request,block_id):
