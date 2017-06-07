@@ -16,11 +16,16 @@ def create_comment(request):
     article_id = request.POST["article_id"]
     content = request.POST["content"]
     user = request.user
+    to_comment_id = int(request.POST.get("to_comment_id",0))  
+    if to_comment_id !=0:
+        to_comment = Comment.objects.get(id=to_comment_id,status=0)
+    else:
+        to_comment = None
     print(article_id,"----------------------------",content,"-----------------",user)
-    
+     
     article = Article.objects.get(id=article_id) 
     try: 
-        comment = Comment(article=article,owner=user,content=content,status=0)
+        comment = Comment(article=article,owner=user,content=content,status=0,to_comment=to_comment)
         comment.save()
         ret = {"status":"ok","msg":""}
     except Exception as e:

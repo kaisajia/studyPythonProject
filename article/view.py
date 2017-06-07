@@ -167,7 +167,8 @@ def article_detail(request,block_id,aid):
     article = Article.objects.get(id=aid)
         
     ##评论内容及评论分页
-    all_comments = Comment.objects.filter(article = aid,status=0).order_by("-create_timestamp")  ###order_by ("-column_name")  表示降序
+    #all_comments = Comment.objects.filter(article = aid,status=0).order_by("-create_timestamp")  ###order_by ("-column_name")  表示降序
+    all_comments = Comment.normal_objects.filter(article=aid).order_by("-create_timestamp")  ##增加数据管理员逻辑
     page_no = int(request.GET.get("page_no","1"))
     page_comments,paginate_data = paginate_queryset(all_comments,page_no)
     #print("all_comments..........",all_comments.size)

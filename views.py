@@ -11,3 +11,9 @@ def index(request):
     block_infos=Block.objects.filter(status=0).order_by("-id")
     ##取满足filter数据  还可以用不等于条件  __gt=0 是指大于0 status__gte=0 是指大于等于0  __lt=0是指小于0 __lte=0是指小于等于0
     return render(request,"index.html",{"blocks":block_infos})
+
+
+
+
+
+

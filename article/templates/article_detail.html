@@ -26,15 +26,24 @@
                 <tr>
                     <th>作者</th>
                     <th>内容</th> 
-                    <th>创建时间</th>
+                    <th>创建时间</th> 
                 </tr>
             </thead>
             <tbody>
                 {% for comment in comments %}
                 <tr> 
                     <td>{{ comment.owner }}</td>
-                    <td>{{ comment.content | linebreaksbr }}</td>
-                    <td>{{ comment.create_timestamp|date:"Y-m-d P" }}</td>
+                    <td> 
+                        {% if comment.to_comment %}
+                        <blockquote>  
+                            <b>{{ comment.to_comment.owner.username }}:</b>
+                            </br>
+                                {{ comment.to_comment.content|linebreaksbr }}
+                        </blockquote>
+                        {% endif%}
+                        {{ comment.content | linebreaksbr }}
+                    </td>
+                    <td>{{ comment.create_timestamp|date:"Y-m-d P" }}   <a href="#commentContent" date-id="{{ comment.id }}" class="replyBtn btn btn-primary pull-right">回复</a></td> 
                 </tr>
                 {% endfor %}
             </tbody>
@@ -69,13 +78,13 @@ $(document).ready(function(){
     $("#commentBtn").click(function(){
             var comment = $("#commentContent").val(); 
             var param = {"article_id":article_id,"content":comment};
-            alert(comment);
+            //alert(comment);
             $.post("/comment/create/",param,function(data){
-                alert(data);
+                //alert(data);
                 //var ret = JSON.parse(data);
-                alert(data["status"])
+                //alert(data["status"])
                 if (data["status"]=="ok") {
-                    alert("OK")
+                    //alert("OK")
                     $("commentContent").val("");
                     window.location.href = "/article/{{ block_id }}/article_detail/{{ art.id }}?page_no=" + page_cnt
                 } else {
