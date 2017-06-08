@@ -43,7 +43,7 @@
                         {% endif%}
                         {{ comment.content | linebreaksbr }}
                     </td>
-                    <td>{{ comment.create_timestamp|date:"Y-m-d P" }}   <a href="#commentContent" date-id="{{ comment.id }}" class="replyBtn btn btn-primary pull-right">回复</a></td> 
+                    <td>{{ comment.create_timestamp|date:"Y-m-d P" }}   <a href="#commentContent" data-id="{{ comment.id }}" class="replyBtn btn btn-primary pull-right">回复</a></td> 
                 </tr>
                 {% endfor %}
             </tbody>
@@ -71,13 +71,24 @@
 <script type="text/javascript" src="http://www.htmleaf.com/js/jquery/1.9.1/jquery.js"/>
 <script type="text/javascript" src="../../static/js/jquery.csrf.js"></script>
 <script type="text/javascript">
+var to_comment_id=0
+$(".replyBtn").click(function(e){
+    to_comment_id = parseInt($(e.target).attr("data-id")); //输入框获取焦点 e.target
+    $("#commentContent").focus();   
+    return false;  //阻断被点击元素获取焦点
+//事件发生顺序：
+//1)点击被点击元素获得焦点
+//2）监听点击,回调的js语句执行
+//3）被点击元素获取到焦点
+    });
 
+    
 $(document).ready(function(){
     var article_id = "{{ art.id }}";
     var page_cnt = "{{ paginate_data.page_no }}"; 
     $("#commentBtn").click(function(){
             var comment = $("#commentContent").val(); 
-            var param = {"article_id":article_id,"content":comment};
+            var param = {"article_id":article_id,"content":comment,"to_comment_id":to_comment_id};
             //alert(comment);
             $.post("/comment/create/",param,function(data){
                 //alert(data);
@@ -92,8 +103,8 @@ $(document).ready(function(){
                 }
             });
         })
-    });
-    
+    }); 
+
 </script>
 
 
