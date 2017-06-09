@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %} 
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>标题</th> 
+        </tr>
+    </thead>
+    <tbody>
+        {% for message in systemmessages %}
+        <tr>
+            <td><a href="/sysmessage/read?messageId={{ message.id }}">{{ message.content }}</a></td> 
+        </tr>
+        {% endfor %}
+    </tbody> 
+</table>
+{% include "pagination_html.html" %}
+
+{% endblock %}

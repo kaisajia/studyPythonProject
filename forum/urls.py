@@ -12,5 +12,6 @@ urlpatterns = [
     url(r'^register/',include('user.urls')),
     url(r'^user/',include('user.urls')),
     url(r'^comment/',include('comment.urls')),
+    url(r'^sysmessage/',include('systemmessage.urls')),
     url(r'^$',views.index),
 ]
