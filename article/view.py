@@ -1,4 +1,6 @@
 from block.models import Block
+from systemmessage.view import message_cnt
+
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -10,33 +12,8 @@ from django.views.generic import View
 from django.views.generic import DeleteView
 from django.views.generic import DetailView
 
-from django.core.paginator import Paginator
-
-
-def paginate_queryset(objs,page_no,cnt_per_age=3,half_show_length=3):
-    p = Paginator(objs,cnt_per_age)
-    if page_no > p.num_pages:
-        page_no = p.num_pages
-    if page_no <= 0:
-        page_no = 1
-    page_links = [i for i in range(page_no - half_show_length,page_no + half_show_length + 1)
-                  if i > 0 and i<=p.num_pages ]
-    page = p.page(page_no)
-    page_first = page_links[0] - 1
-    page_max = page_links[-1] + 1
-    #print("p.page_links...............:",p.count)
-    paginate_data = {"has_previous":page_first > 0,
-                     "has_next":page_max <= p.num_pages,
-                     "page_first":page_first ,
-                     "page_links":page_links,
-                     "page_max":page_max,
-                     "page_no":page_no,
-                     "page_links":page_links,
-                     "page_next":page_no + 1,
-                     "page_pre":page_no - 1,
-                     "count":p.count}
-    #print("paginate_data............................................:",paginate_data)
-    return (page.object_list,paginate_data)
+from .paginate import paginate_queryset
+ 
 
 def article_list(request,block_id):
     block_id = int(block_id)
@@ -172,8 +149,9 @@ def article_detail(request,block_id,aid):
     page_no = int(request.GET.get("page_no","1"))
     page_comments,paginate_data = paginate_queryset(all_comments,page_no)
     #print("all_comments..........",all_comments.size)
-    print(block_id,block.name,block.manager_name)
-    return render(request,"article_detail.html",{"block_id":block_id,"block_name":block.name,"art":article,"comments":page_comments,"paginate_data":paginate_data})
+    msg_cnt = message_cnt(request.user)
+    print(block_id,block.name,block.manager_name,msg_cnt)
+    return render(request,"article_detail.html",{"block_id":block_id,"block_name":block.name,"art":article,"comments":page_comments,"paginate_data":paginate_data,"msg_cnt":msg_cnt})
 
 
 ###基于类

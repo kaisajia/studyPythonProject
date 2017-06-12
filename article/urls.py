@@ -8,6 +8,7 @@ from .view import ArticleDetailView
 from django.contrib.auth.decorators import login_required
 
 
+
 urlpatterns=[
     url(r'^list/(?P<block_id>\d+)',article_list),
     #url(r'^(?P<b_id>\d+)/publish_article',publish_article),

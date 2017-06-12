@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from .models import SystemMessage
 from article.models import Article
 from comment.models import Comment
-from article.view import paginate_queryset
+from article.paginate import paginate_queryset  
 
 def create_message(owner,content,article,to_comment):
     if to_comment:
@@ -12,7 +12,7 @@ def create_message(owner,content,article,to_comment):
         message_content = "有人评价了你的文章'"+content +"'"
     link= "/article/"+str(article.block.id)+"/article_detail/"+str(article.id)
     print(message_content,'.......',link) 
-    message = SystemMessage(owner=owner,content=message_content,link=link,status=0)
+    message = systemmessage(owner=owner,content=message_content,link=link,status=0)
     message.save() 
   
 
@@ -35,9 +35,10 @@ def message_list(request):
 def message_read(request):
     user = request.user
     messageId = int(request.GET.get("messageId"))
-    message = SystemMessage.objects.filter(id=messageId) 
-    message.status=1
-    print("message..........................",message)
+    sysmessage = SystemMessage.objects.filter(id=messageId)
+    message = sysmessage[0]
+    message.status=1 
     message.save()
-    return render(request,message.link)
+    link = message.link 
+    return redirect(link)
     
