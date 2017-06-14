@@ -16,4 +16,4 @@ urlpatterns = [
     url(r'^$',views.index),
 ]
 
-#admin.site.disable_action('delete_selected')   ###使数据库管理中的删除数据动作不可用
+admin.site.disable_action('delete_selected')   ###使数据库管理中的删除数据动作不可用

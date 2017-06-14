@@ -1,1 +1,129 @@
-test git
+100167945       2016-04-18 20:21:57     2016-04-18 20:21:57     0.9999996565871113
+115065972       2016-07-26 20:10:03     2016-07-26 20:10:03  
+102012960       2016-04-19 11:33:54     2016-09-08 06:31:41  
+121264975       2016-11-18 09:24:03     2016-11-18 09:24:03  
+117748288       2016-08-30 20:28:57     2016-10-31 12:44:47  
+121319282       2016-11-19 10:20:30     2016-11-19 10:20:30  
+122735100       2017-01-05 21:24:01     2017-01-05 21:24:01  
+102188326       2016-04-19 11:56:49     2016-04-19 11:56:49  
+121758895       2016-11-29 08:37:05     2016-12-30 02:12:19  
+107830423       2016-08-23 20:19:13     2016-08-23 20:19:13  
+103711198       2016-04-19 15:14:31     2016-09-16 02:08:49  
+122038664       2016-12-08 15:38:44     2017-02-09 08:05:15  
+124981069       2017-03-11 02:46:29     2017-03-11 02:46:29  
+116264005       2016-08-03 17:17:53     2016-08-03 17:17:53  
+113413427       2016-07-02 14:19:25     2017-01-21 05:58:37  
+116266112       2016-08-03 17:56:27     2016-08-03 17:56:27  
+113143970       2016-06-30 12:51:14     2016-07-15 18:28:18  
+111068091       2016-05-26 21:42:10     2016-05-26 21:42:10  
+110656003       2016-05-16 16:44:13     2016-05-16 16:44:13  
+120763897       2016-11-03 23:13:03     2016-11-03 23:13:03  
+                                                             
+
+
+
+ 
+ 
+select distinct t01.qd_uid
+    ,create_date
+    ,update_date
+    ,t01.num 
+from 
+(
+    select qd_uid
+        ,create_date
+        ,update_date
+        ,rand() as num 
+    from dwd.dwd_qd_resume_base_info_da
+    where dt='2017-05-06' 
+) t01 
+left join 
+(
+    select qd_uid 
+    from ods.ods_qd_deliver_base_info_da
+    where dt='2017-05-06' 
+) t02 on t01.qd_uid = t02.qd_uid 
+where t02.qd_uid is null 
+order by t01.num  desc 
+limit 20
+;
+ 
+ 
+ 
+add file /ROOT/LOGS/siqi.feng/qd_user_deliver.py;
+select 
+TRANSFORM(qd_uid,deliver_info,create_date,update_date) 
+USING 'python qd_user_deliver.py deliver_info' 
+as (qd_uid,sid,srid,disp_time,refresh_time,update_time,appoint_time,recruit_path,create_date,update_date) 
+from 
+( 
+    select 
+        qd_uid 
+        ,get_json_object(regexp_replace(regexp_replace(resume_info,repeat('\134',4),repeat('\134',2)),'\\\\n|\\\\r|\\\\t|\\s+',' '),'$.deliver_info') as deliver_info 
+        ,create_date 
+        ,update_date 
+    from ods.ods_db_resume_qd_tb_qd_resume_di 
+    where dt='2016-08-12'
+    and qd_uid= 100000008 
+)t 
+;
+ 
+ 
+select qd_uid 
+from ods.ods_qd_deliver_base_info_da
+where dt='2017-05-06' 
+and qd_uid=100000267
+
+add file /ROOT/LOGS/siqi.feng/qd_user_deliver.py;
+select 
+TRANSFORM(qd_uid,deliver_info,create_date,update_date) 
+USING 'python qd_user_deliver.py deliver_info' 
+as (qd_uid,sid,srid,disp_time,refresh_time,update_time,appoint_time,recruit_path,create_date,update_date) 
+from 
+( 
+    select 
+        qd_uid 
+        ,get_json_object(regexp_replace(regexp_replace(resume_info,repeat('\134',4),repeat('\134',2)),'\\\\n|\\\\r|\\\\t|\\s+',' '),'$.deliver_info') as deliver_info 
+        ,create_date 
+        ,update_date 
+    from ods.ods_db_resume_qd_tb_qd_resume_di 
+    where dt='2017-01-12'
+    and qd_uid= 122861608 
+)t 
+;
+ 
+select * 
+from ods.ods_db_resume_qd_tb_qd_resume_di 
+where dt='2017-01-12'
+and qd_uid= 122861608
+
+
+
+
+add file /ROOT/LOGS/siqi.feng/qd_user_deliver.py;
+select 
+TRANSFORM(qd_uid,deliver_info,create_date,update_date) 
+USING 'python qd_user_deliver.py deliver_info' 
+as (qd_uid,sid,srid,disp_time,refresh_time,update_time,appoint_time,recruit_path,create_date,update_date) 
+from 
+( 
+    select qd_uid
+        ,regexp_replace(deliver_info,'null','\"\"') as deliver_info 
+        ,create_date
+        ,update_date
+    from 
+    (
+        select 
+            qd_uid 
+            ,get_json_object(regexp_replace(regexp_replace(resume_info,repeat('\134',4),repeat('\134',2)),'\\\\n|\\\\r|\\\\t|\\s+',' '),'$.deliver_info') as deliver_info 
+            ,create_date 
+            ,update_date 
+        from ods.ods_db_resume_qd_tb_qd_resume_di 
+        where dt='2017-01-12'
+        and qd_uid= 122861608 
+    ) tt 
+)t 
+;
+
+
+ 
