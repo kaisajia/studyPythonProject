@@ -18,6 +18,7 @@ def create_comment(request):
     article_id = request.POST["article_id"]
     content = request.POST["content"]
     user = request.user
+    print('user........',user.is_superuser,user.username,user.email,user.is_staff,user.is_active)
     to_comment_id = int(request.POST.get("to_comment_id",0))  
     if to_comment_id !=0:
         to_comment = Comment.objects.get(id=to_comment_id,status=0)

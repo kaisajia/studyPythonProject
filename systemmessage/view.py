@@ -12,16 +12,17 @@ def create_message(owner,content,article,to_comment):
         message_content = "有人评价了你的文章'"+content +"'"
     link= "/article/"+str(article.block.id)+"/article_detail/"+str(article.id)
     print(message_content,'.......',link) 
-    message = systemmessage(owner=owner,content=message_content,link=link,status=0)
+    message = SystemMessage(owner=owner,content=message_content,link=link,status=0)
+    print('message.............',message)
     message.save() 
   
 
-def message_cnt(user): 
+def message_cnt(user):
+    print("enter msg_cnt...............")
     messages = SystemMessage.objects.filter(owner=user,status=0)
     page_messages,page_data = paginate_queryset(messages,1,cnt_per_age=1)
     message_count = page_data["count"] 
     return message_count
-
 
 def message_list(request):
     user = request.user
