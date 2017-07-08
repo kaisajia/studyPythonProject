@@ -8,8 +8,10 @@ from article.paginate import paginate_queryset
 def create_message(owner,content,article,to_comment):
     if to_comment:
         message_content = "有人评价了你的评论'"+content +"'"
+        owner = to_comment.owner
     else:
         message_content = "有人评价了你的文章'"+content +"'"
+        owner = article.owner 
     link= "/article/"+str(article.block.id)+"/article_detail/"+str(article.id)
     print(message_content,'.......',link) 
     message = SystemMessage(owner=owner,content=message_content,link=link,status=0)
@@ -17,12 +19,12 @@ def create_message(owner,content,article,to_comment):
     message.save() 
   
 
-def message_cnt(user):
-    print("enter msg_cnt...............")
-    messages = SystemMessage.objects.filter(owner=user,status=0)
-    page_messages,page_data = paginate_queryset(messages,1,cnt_per_age=1)
-    message_count = page_data["count"] 
-    return message_count
+# def message_cnt(user):
+#     print("enter msg_cnt...............")
+#     messages = SystemMessage.objects.filter(owner=user,status=0)
+#     page_messages,page_data = paginate_queryset(messages,1,cnt_per_age=1)
+#     message_count = page_data["count"] 
+#     return message_count
 
 def message_list(request):
     user = request.user

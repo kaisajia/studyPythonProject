@@ -1,5 +1,5 @@
 from block.models import Block
-from systemmessage.view import message_cnt
+ 
 
 from django.contrib.auth.models import User
 from django.shortcuts import render
@@ -149,9 +149,9 @@ def article_detail(request,block_id,aid):
     page_no = int(request.GET.get("page_no","1"))
     page_comments,paginate_data = paginate_queryset(all_comments,page_no)
     #print("all_comments..........",all_comments.size)
-    msg_cnt = message_cnt(request.user)
-    print(block_id,block.name,block.manager_name,msg_cnt)
-    return render(request,"article_detail.html",{"block_id":block_id,"block_name":block.name,"art":article,"comments":page_comments,"paginate_data":paginate_data,"msg_cnt":msg_cnt})
+    #msg_cnt = message_cnt(request.user)
+    print(block_id,block.name,block.manager_name)
+    return render(request,"article_detail.html",{"block_id":block_id,"block_name":block.name,"art":article,"comments":page_comments,"paginate_data":paginate_data})
 
 
 ###基于类

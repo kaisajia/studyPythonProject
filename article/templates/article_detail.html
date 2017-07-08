@@ -89,11 +89,14 @@ $(document).ready(function(){
     $("#commentBtn").click(function(){
             var comment = $("#commentContent").val(); 
             var param = {"article_id":article_id,"content":comment,"to_comment_id":to_comment_id};
-            //alert(comment);
+
             $.post("/comment/create/",param,function(data){
                 //alert(data);
                 //var ret = JSON.parse(data);
-                //alert(data["status"])
+                if (typeof(data["msg"])=="undefined"){ 
+                    window.location.href = "/accounts/login/?next=/article/{{ block_id }}/article_detail/{{ art.id }}"  
+                }
+                
                 if (data["status"]=="ok") {
                     //alert("OK")
                     $("commentContent").val("");
